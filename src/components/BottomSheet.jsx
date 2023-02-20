@@ -64,7 +64,7 @@ const BottomSheet = forwardRef(({ children, title, ...otherProps }, ref) => {
   useEffect(() => {
     // make it visible at the beginning
     // translateY.value = withTiming(-SCREEN_HEIGHT / 3);
-    scrollBottomSheetTo(-300);
+    scrollBottomSheetTo(0);
   }, []);
 
   const panGesture = Gesture.Pan()
