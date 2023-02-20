@@ -1,64 +1,59 @@
 import {
+  Dimensions,
+  Keyboard,
   Pressable,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
+import { useRef, useState } from "react";
 
-import BottomSheet from "./src/components/BottomSheet";
+import AppContext from "./src/context/appContext";
+import BottomSheet from "./src/components/bottomSheet/BottomSheet";
+import BottomSheetForm from "./src/components/bottomSheet/BottomSheetForm";
+import BottomSheetPage from "./src/pages/BottomSheetPage";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
-import { useRef } from "react";
+
+const { height: SCREEN_HEIGHT } = Dimensions.get("screen");
 
 export default function App() {
+  const [bottomSheetOptions, setBottomSheetOptions] = useState({
+    title: null,
+    content: null,
+  });
   const bottomSheetRef = useRef();
 
-  const handleToggle = () => {
-    !bottomSheetRef?.current?.isActive()
-      ? bottomSheetRef?.current?.scrollBottomSheetTo(-300)
-      : bottomSheetRef?.current?.scrollBottomSheetTo(0);
+  const appContextValue = {
+    openBottomSheet: ({ title, content }) => {
+      if (!bottomSheetRef?.current?.isActive()) {
+        setBottomSheetOptions({ title: title, content: content });
+        bottomSheetRef?.current?.scrollBottomSheetTo(-SCREEN_HEIGHT * 0.75);
+      }
+    },
+    closeBottomSheet: () => {
+      if (Keyboard.isVisible()) Keyboard.dismiss();
+      bottomSheetRef?.current?.scrollBottomSheetTo(0);
+      setBottomSheetOptions({ title: null, content: null });
+    },
   };
 
   return (
     <GestureHandlerRootView style={styles.root}>
-      <View style={styles.container}>
+      <AppContext.Provider value={appContextValue}>
         <StatusBar style="auto" />
-        <TouchableOpacity onPress={handleToggle}>
-          <Text style={styles.button}>Toggle bottom sheet</Text>
-        </TouchableOpacity>
-        <BottomSheet ref={bottomSheetRef} title="Hello World">
-          <View style={styles.bottomSheetView}>
-            <Text>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </Text>
-          </View>
+        <BottomSheetPage />
+        <BottomSheet ref={bottomSheetRef} title={bottomSheetOptions?.title}>
+          {bottomSheetOptions?.content}
         </BottomSheet>
-      </View>
+      </AppContext.Provider>
     </GestureHandlerRootView>
   );
 }
 
 const styles = StyleSheet.create({
-  bottomSheetView: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "flex-start",
-    paddingBottom: 10,
-    paddingTop: 25,
-  },
-  button: {
-    color: "#21a5e4",
-  },
-  container: {
-    flex: 1,
-    backgroundColor: "#f0f0f0",
-    alignItems: "center",
-    justifyContent: "center",
-  },
   root: {
     flex: 1,
   },

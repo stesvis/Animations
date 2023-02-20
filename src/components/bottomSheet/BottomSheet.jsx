@@ -17,14 +17,19 @@ import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import React, {
   forwardRef,
   useCallback,
+  useContext,
   useEffect,
   useImperativeHandle,
 } from "react";
+
+import AppContext from "../../context/appContext";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("screen");
 const MAX_TRANSLATE_Y = -SCREEN_HEIGHT + 50;
 
 const BottomSheet = forwardRef(({ children, title, ...otherProps }, ref) => {
+  const { closeBottomSheet } = useContext(AppContext);
+
   const translateY = useSharedValue(0);
   const context = useSharedValue({ y: 0 });
   const active = useSharedValue(false);
@@ -80,13 +85,16 @@ const BottomSheet = forwardRef(({ children, title, ...otherProps }, ref) => {
     })
     .onEnd((e) => {
       console.log("onEnd", e);
-      if (translateY.value > -SCREEN_HEIGHT / 3) scrollBottomSheetTo(0);
-      else if (translateY.value < -SCREEN_HEIGHT / 1.5)
+      if (translateY.value > -SCREEN_HEIGHT / 3) {
+        title = null;
+        children = null;
+        scrollBottomSheetTo(0);
+      } else if (translateY.value < -SCREEN_HEIGHT / 1.5)
         scrollBottomSheetTo(MAX_TRANSLATE_Y);
     });
 
   const handleCloseButton = () => {
-    scrollBottomSheetTo(0);
+    closeBottomSheet();
   };
 
   return (
