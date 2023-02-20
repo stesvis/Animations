@@ -6,7 +6,13 @@ import Animated, {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
-import { Dimensions, StyleSheet, View } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import React, {
   forwardRef,
@@ -18,7 +24,7 @@ import React, {
 const { height: SCREEN_HEIGHT } = Dimensions.get("screen");
 const MAX_TRANSLATE_Y = -SCREEN_HEIGHT + 50;
 
-const BottomSheet = forwardRef(({ children, ...otherProps }, ref) => {
+const BottomSheet = forwardRef(({ children, title, ...otherProps }, ref) => {
   const translateY = useSharedValue(0);
   const context = useSharedValue({ y: 0 });
   const active = useSharedValue(false);
@@ -27,7 +33,7 @@ const BottomSheet = forwardRef(({ children, ...otherProps }, ref) => {
     const borderRadius = interpolate(
       translateY.value,
       [MAX_TRANSLATE_Y + 50, MAX_TRANSLATE_Y],
-      [20, 5],
+      [15, 5],
       Extrapolate.CLAMP
     );
 
@@ -58,7 +64,7 @@ const BottomSheet = forwardRef(({ children, ...otherProps }, ref) => {
   useEffect(() => {
     // make it visible at the beginning
     // translateY.value = withTiming(-SCREEN_HEIGHT / 3);
-    scrollBottomSheetTo(0);
+    scrollBottomSheetTo(-300);
   }, []);
 
   const panGesture = Gesture.Pan()
@@ -79,10 +85,22 @@ const BottomSheet = forwardRef(({ children, ...otherProps }, ref) => {
         scrollBottomSheetTo(MAX_TRANSLATE_Y);
     });
 
+  const handleCloseButton = () => {
+    scrollBottomSheetTo(0);
+  };
+
   return (
     <GestureDetector gesture={panGesture}>
       <Animated.View style={[styles.bottomSheet, bottomSheetAnimatedStyle]}>
         <View style={styles.line} />
+        <Text style={styles.title}>{title}</Text>
+        <TouchableOpacity
+          onPress={handleCloseButton}
+          style={styles.closeButton}
+        >
+          <Text>X</Text>
+        </TouchableOpacity>
+        <View style={styles.separatorLine} />
         {children}
       </Animated.View>
     </GestureDetector>
@@ -92,20 +110,34 @@ const BottomSheet = forwardRef(({ children, ...otherProps }, ref) => {
 const styles = StyleSheet.create({
   bottomSheet: {
     backgroundColor: "#ffffff",
-    borderRadius: 20,
-    // flex: 1,
+    borderRadius: 15,
     height: SCREEN_HEIGHT,
     position: "absolute",
     top: SCREEN_HEIGHT,
     width: "100%",
   },
+  closeButton: {
+    position: "absolute",
+    right: 0,
+    top: 0,
+    marginTop: 5,
+    marginRight: 15,
+  },
   line: {
     alignSelf: "center",
-    backgroundColor: "#eaeaea",
+    backgroundColor: "#94a3b8",
     borderRadius: 2,
     height: 4,
     marginTop: 5,
     width: "25%",
+  },
+  separatorLine: { backgroundColor: "#e2e8f0", height: 1, marginVertical: 10 },
+  title: {
+    fontWeight: "bold",
+    marginTop: 15,
+    paddingHorizontal: 20,
+    textAlign: "center",
+    width: "100%",
   },
 });
 

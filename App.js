@@ -27,9 +27,14 @@ export default function App() {
         <TouchableOpacity onPress={handleToggle}>
           <Text style={styles.button}>Toggle bottom sheet</Text>
         </TouchableOpacity>
-        <BottomSheet ref={bottomSheetRef}>
+        <BottomSheet ref={bottomSheetRef} title="Hello World">
           <View style={styles.bottomSheetView}>
-            <Text>Hello World!</Text>
+            <Text>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat.
+            </Text>
           </View>
         </BottomSheet>
       </View>
