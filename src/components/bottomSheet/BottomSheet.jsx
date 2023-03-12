@@ -1,11 +1,10 @@
-import Animated, {
-  Extrapolate,
-  interpolate,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-  withTiming,
-} from "react-native-reanimated";
+import React, {
+  forwardRef,
+  useCallback,
+  useContext,
+  useEffect,
+  useImperativeHandle,
+} from "react";
 import {
   Dimensions,
   StyleSheet,
@@ -14,13 +13,13 @@ import {
   View,
 } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import React, {
-  forwardRef,
-  useCallback,
-  useContext,
-  useEffect,
-  useImperativeHandle,
-} from "react";
+import Animated, {
+  Extrapolate,
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
 
 import AppContext from "../../context/appContext";
 
@@ -74,23 +73,23 @@ const BottomSheet = forwardRef(({ children, title, ...otherProps }, ref) => {
 
   const panGesture = Gesture.Pan()
     .onStart((e) => {
-      console.log("onStart", e);
+      // console.log("onStart", e);
       context.value = { y: translateY.value };
     })
     .onUpdate((e) => {
-      console.log("onUpdate", e);
+      // console.log("onUpdate", e);
       translateY.value = e.translationY + context.value.y;
       // avoid dragging above the top of the screen
       translateY.value = Math.max(translateY.value, MAX_TRANSLATE_Y);
     })
     .onEnd((e) => {
       console.log("onEnd", e);
-      if (translateY.value > -SCREEN_HEIGHT / 3) {
-        title = null;
-        children = null;
-        scrollBottomSheetTo(0);
-      } else if (translateY.value < -SCREEN_HEIGHT / 1.5)
-        scrollBottomSheetTo(MAX_TRANSLATE_Y);
+      // if (translateY.value > -SCREEN_HEIGHT / 3) {
+      //   title = null;
+      //   children = null;
+      //   scrollBottomSheetTo(0);
+      // } else if (translateY.value < -SCREEN_HEIGHT / 1.5)
+      //   scrollBottomSheetTo(MAX_TRANSLATE_Y);
     });
 
   const handleCloseButton = () => {
@@ -98,20 +97,22 @@ const BottomSheet = forwardRef(({ children, title, ...otherProps }, ref) => {
   };
 
   return (
-    <GestureDetector gesture={panGesture}>
-      <Animated.View style={[styles.bottomSheet, bottomSheetAnimatedStyle]}>
-        <View style={styles.line} />
-        <Text style={styles.title}>{title}</Text>
-        <TouchableOpacity
-          onPress={handleCloseButton}
-          style={styles.closeButton}
-        >
-          <Text>X</Text>
-        </TouchableOpacity>
-        <View style={styles.separatorLine} />
-        {children}
-      </Animated.View>
-    </GestureDetector>
+    <Animated.View style={[styles.bottomSheet, bottomSheetAnimatedStyle]}>
+      <GestureDetector gesture={panGesture}>
+        <View>
+          <View style={styles.line} />
+          <Text style={styles.title}>{title}</Text>
+          <TouchableOpacity
+            onPress={handleCloseButton}
+            style={styles.closeButton}
+          >
+            <Text>X</Text>
+          </TouchableOpacity>
+          <View style={styles.separatorLine} />
+        </View>
+      </GestureDetector>
+      {children}
+    </Animated.View>
   );
 });
 
@@ -130,6 +131,7 @@ const styles = StyleSheet.create({
     top: 0,
     marginTop: 5,
     marginRight: 15,
+    padding: 5,
   },
   line: {
     alignSelf: "center",

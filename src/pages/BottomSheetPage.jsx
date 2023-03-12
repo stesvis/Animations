@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
+import BottomSheetForm from "../components/bottomSheet/BottomSheetContent";
 import AppContext from "../context/appContext";
-import BottomSheetForm from "../components/bottomSheet/BottomSheetForm";
 
 const BottomSheetPage = (props) => {
   const { openBottomSheet } = useContext(AppContext);

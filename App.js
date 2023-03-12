@@ -1,21 +1,11 @@
-import {
-  Dimensions,
-  Keyboard,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
 import { useRef, useState } from "react";
+import { Dimensions, Keyboard, StyleSheet } from "react-native";
 
-import AppContext from "./src/context/appContext";
-import BottomSheet from "./src/components/bottomSheet/BottomSheet";
-import BottomSheetForm from "./src/components/bottomSheet/BottomSheetForm";
-import BottomSheetPage from "./src/pages/BottomSheetPage";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import BottomSheet from "./src/components/bottomSheet/BottomSheet";
+import AppContext from "./src/context/appContext";
+import BottomSheetPage from "./src/pages/BottomSheetPage";
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("screen");
 
