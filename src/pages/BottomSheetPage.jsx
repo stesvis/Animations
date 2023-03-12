@@ -8,7 +8,10 @@ const BottomSheetPage = (props) => {
   const { openBottomSheet } = useContext(AppContext);
 
   const handleToggle = () => {
-    openBottomSheet({ title: "Type a comment", content: <BottomSheetForm /> });
+    openBottomSheet({
+      title: "Bottom Sheet Title",
+      content: <BottomSheetForm />,
+    });
   };
 
   return (

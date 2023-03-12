@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 
 const BottomSheetContent = ({ text }) => {
   const [val, setVal] = useState(text);
@@ -15,11 +15,10 @@ const BottomSheetContent = ({ text }) => {
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={{ alignItems: "center", flex: 1 }}
+        nestedScrollEnabled
       >
         <View style={styles.greenView} />
-        <View style={styles.yellowView}>
-          <Button title="Test Button" />
-        </View>
+        <View style={styles.yellowView} />
       </ScrollView>
     </View>
   );
@@ -30,7 +29,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#d3eff9",
     flex: 1,
     padding: 10,
-    paddingBottom: 50,
   },
   scrollView: {},
   greenView: {

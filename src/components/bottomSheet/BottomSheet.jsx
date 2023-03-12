@@ -47,6 +47,12 @@ const BottomSheet = forwardRef(({ children, title, ...otherProps }, ref) => {
     };
   });
 
+  const containerStyle = useAnimatedStyle(() => {
+    return {
+      height: -translateY.value - 100,
+    };
+  });
+
   const scrollBottomSheetTo = useCallback((to) => {
     "worklet";
     console.log("scrollBottomSheetTo");
@@ -83,13 +89,14 @@ const BottomSheet = forwardRef(({ children, title, ...otherProps }, ref) => {
       translateY.value = Math.max(translateY.value, MAX_TRANSLATE_Y);
     })
     .onEnd((e) => {
-      console.log("onEnd", e);
-      // if (translateY.value > -SCREEN_HEIGHT / 3) {
-      //   title = null;
-      //   children = null;
-      //   scrollBottomSheetTo(0);
-      // } else if (translateY.value < -SCREEN_HEIGHT / 1.5)
-      //   scrollBottomSheetTo(MAX_TRANSLATE_Y);
+      // console.log("onEnd", e);
+      console.log("translateY.value", translateY.value);
+      if (translateY.value > -SCREEN_HEIGHT / 4) {
+        title = null;
+        children = null;
+        scrollBottomSheetTo(0);
+      } else if (translateY.value < -SCREEN_HEIGHT / 1.5)
+        scrollBottomSheetTo(MAX_TRANSLATE_Y);
     });
 
   const handleCloseButton = () => {
@@ -111,7 +118,7 @@ const BottomSheet = forwardRef(({ children, title, ...otherProps }, ref) => {
           <View style={styles.separatorLine} />
         </View>
       </GestureDetector>
-      {children}
+      <Animated.View style={containerStyle}>{children}</Animated.View>
     </Animated.View>
   );
 });
